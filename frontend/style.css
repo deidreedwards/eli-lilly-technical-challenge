@@ -30,7 +30,7 @@ body {
 }
 
 /* ---- Your custom styles below ---- */
-.med-list {
+.med-container {
     max-width: 600px;
     margin: 0 auto;
 }
@@ -40,9 +40,69 @@ body {
     border-color: #d52b1e;
     padding: 10px;
     margin-bottom: 10px;
+    background-color: white;
+    border-radius: 4px;
 }
 
 h1 {
     text-align: center;
     color: #d52b1e;
+}
+
+.medicine-incomplete {
+    border: 1px solid #ffd700;
+    background-color: #fffef0;
+}
+
+.warning-button {
+    background-color: #fff3cd;
+    color: #856404;
+    border: 1px solid #ffeeba;
+    padding: 5px 10px;
+    border-radius: 4px;
+    cursor: help;
+    margin-top: 8px;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    font-size: 0.9em;
+    transition: all 0.2s ease;
+}
+  
+  .warning-button:hover {
+    background-color: #ffe8a1;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+  
+
+.warning-button[title]:hover:after {
+    content: attr(title);
+    position: absolute;
+    background: #333;
+    color: white;
+    padding: 5px 10px;
+    border-radius: 3px;
+    margin-top: -30px;
+    margin-left: 10px;
+    font-size: 0.8em;
+    z-index: 10;
+}
+
+.status-message {
+    padding: 10px;
+    margin-bottom: 15px;
+    text-align: center;
+    border-radius: 4px;
+    max-width: 600px;
+    margin: 0 auto 15px auto;
+}
+
+.status-loading {
+    background-color: #e9f5ff;
+    color: #0066cc;
+}
+
+.status-error {
+    background-color: #fff0f0;
+    color: #cc0000;
 }
