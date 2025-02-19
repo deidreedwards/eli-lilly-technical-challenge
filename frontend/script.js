@@ -1,10 +1,11 @@
 document.addEventListener('DOMContentLoaded', () => {
     const main = document.querySelector('main');
     
-    // Create a simple container for our medicines
-    const medicineList = document.createElement('div');
-    medicineList.id = 'medicineList';
-    main.appendChild(medicineList);
+    // Container for medicines
+    const medList = document.createElement('div')
+    medList.id = 'medicineList';
+    main.appendChild(medList);
+
 
     // Function to fetch medicines from API
     async function fetchMedicines() {
@@ -14,13 +15,13 @@ document.addEventListener('DOMContentLoaded', () => {
             displayMedicines(data.medicines);
         } catch (error) {
             console.error('Error:', error);
-            medicineList.innerHTML = 'Error loading medicines';
+            medList.innerHTML = 'Error loading medicines';
         }
     }
 
     // Function to display medicines on site
     function displayMedicines(medicines) {
-       medicineList.innerHTML = ''; // Avoids duplicates
+       medList.innerHTML = ''; // Avoids duplicates
         
         medicines.forEach(medicine => {
             const medicineElement = document.createElement('div');
@@ -29,7 +30,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 <p>Name: ${medicine.name}</p>
                 <p>Price: $${medicine.price}</p>
             `;
-            medicineList.appendChild(medicineElement);
+            medList.appendChild(medicineElement);
         });
     }
 
