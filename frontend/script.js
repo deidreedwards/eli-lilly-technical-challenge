@@ -19,9 +19,13 @@ document.addEventListener('DOMContentLoaded', () => {
         const listSection = document.createElement('section');
         listSection.className = 'medicine-list';
         listSection.innerHTML = `
-        <h2>Medicine List</h2>
-        <div id = "medicineContainer"></div>
-        <div id = "errorContainer" class = "error-container"></div>
+            <div class = "list-header">
+                <h2>Medicine List</h2>
+                <button id="averageButton" class = "average-btn">Calculate average medicine price</button>
+            </div>
+            <div id = "averageResult" class = "average-result"></div>
+            <div id = "medicineContainer"></div>
+            <div id = "errorContainer" class = "error-container"></div>
         `;
 
         const formSection = document.createElement('section');
@@ -37,6 +41,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
         main.appendChild(listSection);
         main.appendChild(formSection);
+
+        document.getElementById('averageButton').addEventListener('click', calculateAverage);
     };
 
     // Function to fetch medicines from API
@@ -95,10 +101,10 @@ document.addEventListener('DOMContentLoaded', () => {
                 ${!validatedMed.isComplete ? '<p class = "warning"> Incomplete data</p>' : ''}
                 <div class = "card-actions">
                     <button onclick = "updateMedicine('${validatedMed.name}')"
-                            ${!validatedMed.isComplete ? 'disabled' : ''}>Update</button>
+                            >Update</button>
                     <button onclick = "deleteMedicine('${validatedMed.name}')"
                             class = "delete-btn"
-                            ${!validatedMed.isComplete ? 'disabled' : ''}>Delete</button>
+                            >Delete</button>
                 </div>
             `;
             container.appendChild(medicineCard);
@@ -198,8 +204,8 @@ document.addEventListener('DOMContentLoaded', () => {
         if (!newPrice) return;
 
         const price = parseFloat(newPrice);
-        if (isNaN(price) || price < 0) {
-            showError('Please enter a valid price (must be a positive number)');
+        if (isNaN(price) || price <= 0) {
+            showError('Please enter a valid price (must be greater than 0)');
             return;
         }
 
@@ -229,7 +235,32 @@ document.addEventListener('DOMContentLoaded', () => {
             console.error('Error updating medicine:', error);
             showError(`Failed to update ${name}. Please try again.`);
         }
+    };
 
+    const calculateAverage = async() => {
+        const averageResult = document.getElementById('averageResult');
+        try {
+            const response = await fetch('http://localhost:8000/average');
+            if (!response.ok) {
+                throw new Error(`HTTP error! Status: ${response.status}`);
+            }
+
+            const data = await response.json();
+
+            if (data.message) {
+                averageResult.innerHTML = `
+                    <div class = "average-display">
+                        <p>${data.message}</p>
+                        ${data.average ? `<p class="average-value">$${parseFloat(data.average).toFixed(2)}</p>` : ''}
+                    </div>
+                `;
+            } else {
+                throw new Error('Invalid response from server');
+            }
+        } catch (error) {
+            console.error('Error calculating average:', error);
+            averageResult.innerHTML = '<p class = "error">Failed to calculate average. Please try again.</p>';
+        }
     };
 
     const showSuccess = (message) => {
