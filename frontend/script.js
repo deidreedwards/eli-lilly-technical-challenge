@@ -68,16 +68,24 @@ document.addEventListener('DOMContentLoaded', () => {
         
        // Check if medicines array is empty
        if (!medicines || medicines.length === 0) {
-        container.innerHTML = `
-        <div class = "empty-state">
-            <p>No medicines available at the moment.</p>
-            <p>Try adding a new medicine using the form.</p>
-        </div>
-        `;
-        return;
-    }
+            container.innerHTML = `
+            <div class = "empty-state">
+                <p>No medicines available at the moment.</p>
+                <p>Try adding a new medicine using the form.</p>
+            </div>
+            `;
+            return;
+        }
+
+        const sortedMedicines = [...medicines].sort((a, b) => {
+            if (!a.name) return 1;
+            if (!b.name) return -1;
+
+            return a.name.localeCompare(b.name);
+        });
+
         //Goes through each medicine in array and checks it
-        medicines.forEach(medicine => {
+        sortedMedicines.forEach(medicine => {
             const validatedMed = validateMedicineData(medicine);
             const medicineCard = document.createElement('div');
             medicineCard.className = `medicine-card ${validatedMed.isComplete ? '' : 'incomplete-data'}`;
